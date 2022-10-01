@@ -1,1 +1,1 @@
-# MiTAI
+# methods and technologies artificial intelligence
