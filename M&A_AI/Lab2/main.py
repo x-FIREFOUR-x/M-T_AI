@@ -60,43 +60,71 @@ def modeling_function():
     ax.set_zlabel('z')
     plt.show()
 
-def table_value_mf_for_mx_my(mx, my):
-    table_values = []
-    for i in range(0, len(my)):
-        line_table = []
-        for j in range(0, len(mx)):
-            line_table.append(function_z(mx[j], my[i]))
-        table_values.append(line_table)
+def tables(mx, my, mf):
+    def print_table(table, is_value):
+        if is_value:
+            sep = 8 * "_"
+        else:
+            sep = "_"
 
-    print()
-    for line in table_values:
-        for elem in line:
-            print(f'{elem:.8f}', end='\t')
+        print()
+        print(4 * " ", end="")
+        for i in range(1, len(table) + 1):
+            print(sep + "mx" + str(i), end="")
         print()
 
-    return table_values
+        i = 1
+        for line in table:
+            print("my" + str(i), end="| ")
+            for elem in line:
+                if is_value:
+                    print(f'{elem:.8f}', end=' ')
+                else:
+                    print(elem, end=' ')
+            i += 1
+            print()
 
-def table_name_mf_for_mx_my(table_value, mf):
-    table = []
-    for line in table_value:
-        new_line = []
-        for elem in line:
-            name = ""
-            min_sub = 1
-            for i in range(0, len(mf)):
-                if (abs(elem - mf[i]) < min_sub):
-                    name = "mf" + str(i+1)
-                    min_sub = abs(elem - mf[i])
-            new_line.append(name)
-        table.append(new_line)
-
-    print()
-    for line in table:
-        for elem in line:
-            print(elem, end='\t')
+    def print_mf():
+        print()
+        for i in range(1, len(mf)+1):
+            print("__mf" + str(i), end="_")
+        print()
+        for elem in mf:
+            print(f'{elem:.3f}', end=" ")
         print()
 
-    return table
+    def table_value_mf_for_mx_my(mx, my):
+        table_values = []
+        for i in range(0, len(my)):
+            line_table = []
+            for j in range(0, len(mx)):
+                line_table.append(function_z(mx[j], my[i]))
+            table_values.append(line_table)
+
+        print_table(table_values, True)
+        return table_values
+
+    def table_name_mf_for_mx_my(table_value, mf):
+        table_name = []
+        for line in table_value:
+            new_line = []
+            for elem in line:
+                name = ""
+                min_sub = 1
+                for i in range(0, len(mf)):
+                    if (abs(elem - mf[i]) < min_sub):
+                        name = "mf" + str(i+1)
+                        min_sub = abs(elem - mf[i])
+                new_line.append(name)
+            table_name.append(new_line)
+
+        print_table(table_name, False)
+        return table_name
+
+    table = table_value_mf_for_mx_my(mx, my)
+    print_mf()
+    table_name_mf_for_mx_my(table, mf)
+
 
 
 
@@ -105,10 +133,10 @@ if __name__ == '__main__':
     my = membership_function_gauss(6, 0.0850, "my")
     mf = membership_function_gauss(9, 0.053, "mf")
 
+    tables(mx, my, mf)
     modeling_function()
 
-    table = table_value_mf_for_mx_my(mx, my)
-    table_name_mf_for_mx_my(table, mf)
+
 
 
 
