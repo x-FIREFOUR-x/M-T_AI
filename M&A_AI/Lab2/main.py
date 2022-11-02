@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import skfuzzy as fuzz
 import skfuzzy.fuzzymath as fuzzmath
 import math
+from skfuzzy import control as ctrl
 
 
 
@@ -32,10 +33,10 @@ def membership_function_gauss(amount_function, G, name):
 
     plt.figure(figsize=(14, 7))
     current_max_point = 0
-    max_points = []
+    max_points = {}
     for i in range(1, amount_function + 1):
         gauss(current_max_point, G, i)
-        max_points.append(current_max_point)
+        max_points[i] = current_max_point
         current_max_point += step
     plt.title(f"Membership function {name}")
     plt.show()
@@ -89,15 +90,15 @@ def tables(mx, my, mf):
         for i in range(1, len(mf)+1):
             print("__mf" + str(i), end="_")
         print()
-        for elem in mf:
-            print(f'{elem:.3f}', end=" ")
+        for i in range(1, len(mf)+1):
+            print(f'{mf[i]:.3f}', end=" ")
         print()
 
     def table_value_mf_for_mx_my(mx, my):
         table_values = []
-        for i in range(0, len(my)):
+        for i in range(1, len(my)+1):
             line_table = []
-            for j in range(0, len(mx)):
+            for j in range(1, len(mx)+1):
                 line_table.append(function_z(mx[j], my[i]))
             table_values.append(line_table)
 
@@ -111,9 +112,9 @@ def tables(mx, my, mf):
             for elem in line:
                 name = ""
                 min_sub = 1
-                for i in range(0, len(mf)):
+                for i in range(1, len(mf)+1):
                     if (abs(elem - mf[i]) < min_sub):
-                        name = "mf" + str(i+1)
+                        name = "mf" + str(i)
                         min_sub = abs(elem - mf[i])
                 new_line.append(name)
             table_name.append(new_line)
@@ -124,7 +125,6 @@ def tables(mx, my, mf):
     table = table_value_mf_for_mx_my(mx, my)
     print_mf()
     table_name_mf_for_mx_my(table, mf)
-
 
 
 
