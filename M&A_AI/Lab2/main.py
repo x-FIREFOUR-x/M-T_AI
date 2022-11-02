@@ -127,14 +127,58 @@ def tables(mx, my, mf):
     table_name_mf_for_mx_my(table, mf)
 
 
+def modeling_function_fuzzy_logic(MX, MY, MF):
+    mx = ctrl.Antecedent(np.linspace(MX[1], MX[len(MX)], len(MX)), 'mx')
+    my = ctrl.Antecedent(np.linspace(MY[1], MY[len(MY)], len(MY)), 'my')
+    mf = ctrl.Antecedent(np.linspace(MF[1], MF[len(MF)], len(MF)), 'mf')
+
+    mx.automf(names=[1, 2, 3, 4, 5, 6])
+    my.automf(names=[1, 2, 3, 4, 5, 6])
+    mf.automf(names=[1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+    rule_mf1 = ctrl.Rule(antecedent=(mx[1] & my[1] | mx[1] & my[2] | mx[1] & my[3] |
+                                     mx[1] & my[4] | mx[1] & my[5] | mx[1] & my[6]),
+                         consequent=mf[1], label="mf1 rule")
+
+    rule_mf2 = ctrl.Rule(antecedent=(mx[2] & my[3] | mx[2] & my[4] | mx[2] & my[5] | mx[2] & my[6]),
+                         consequent=mf[2], label="mf2 rule")
+
+    rule_mf3 = ctrl.Rule(antecedent=(mx[2] & my[1] | mx[2] & my[2] | mx[3] & my[5] | mx[3] & my[6]),
+                         consequent=mf[3], label="mf3 rule")
+
+    rule_mf4 = ctrl.Rule(antecedent=(mx[3] & my[1] | mx[3] & my[2] | mx[3] & my[3] | mx[3] & my[4] |
+                                     mx[4] & my[5] | mx[4] & my[6] | mx[5] & my[6]),
+                         consequent=mf[4], label="mf4 rule")
+
+    rule_mf5 = ctrl.Rule(antecedent=(mx[4] & my[3] | mx[4] & my[4] | mx[5] & my[5] | mx[6] & my[6]),
+                         consequent=mf[5], label="mf5 rule")
+
+    rule_mf6 = ctrl.Rule(antecedent=(mx[4] & my[1] | mx[4] & my[2] | mx[5] & my[4]),
+                         consequent=mf[6], label="mf6 rule")
+
+    rule_mf7 = ctrl.Rule(antecedent=(mx[5] & my[1] | mx[5] & my[2] | mx[5] & my[3] | mx[6] & my[5]),
+                         consequent=mf[4], label="mf7 rule")
+
+    rule_mf8 = ctrl.Rule(antecedent=(mx[6] & my[3] | mx[6] & my[4]),
+                         consequent=mf[8], label="mf8 rule")
+
+    rule_mf9 = ctrl.Rule(antecedent=(mx[6] & my[1] | mx[6] & my[2]),
+                         consequent=mf[9], label="mf9 rule")
+
+    input_ctrl = ctrl.ControlSystem([rule_mf1, rule_mf2, rule_mf3, rule_mf4, rule_mf5, rule_mf6, rule_mf7, rule_mf8, rule_mf9])
+
+
 
 if __name__ == '__main__':
     mx = membership_function_gauss(6, 0.0850, "mx")
     my = membership_function_gauss(6, 0.0850, "my")
     mf = membership_function_gauss(9, 0.053, "mf")
 
+    x = mx[1]
     tables(mx, my, mf)
     modeling_function()
+
+    modeling_function_fuzzy_logic(mx, my, mf)
 
 
 
