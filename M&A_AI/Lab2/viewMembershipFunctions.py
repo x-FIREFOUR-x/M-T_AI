@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import skfuzzy as fuzz
 
-from main import function_z
+from inputFunction import function_z
 
 def triangle(x, a, b, c):
     f = fuzz.trimf(x, [a, b, c])
@@ -39,18 +39,3 @@ def membership_function_gauss(amount_function, G, name):
     plt.show()
     return max_points
 
-
-def modeling_function():
-    x = np.linspace(0, 1, 30)
-    y = np.linspace(0, 1, 30)
-
-    X, Y = np.meshgrid(x, y)
-    Z = function_z(X, Y)
-    fig = plt.figure()
-    plt.title("function for modeling: z = x * cos|y|")
-    ax = plt.axes(projection='3d')
-    ax.contour3D(X, Y, Z, 100, cmap='viridis')
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
-    plt.show()
