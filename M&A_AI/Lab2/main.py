@@ -77,9 +77,9 @@ def tables(mx, my, mf):
 def modeling_function_fuzzy_logic(MX, MY, MF):
     Gxy = 0.085
     Gf = 0.053
-    mx = ctrl.Antecedent(np.arange(0, 1.2, 0.2), 'mx')
-    my = ctrl.Antecedent(np.arange(0, 1.2, 0.2), 'my')
-    mf = ctrl.Consequent(np.arange(0, 1.125, 0.125), 'mf')
+    mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
+    my = ctrl.Antecedent(np.linspace(0, 1, 6), 'my')
+    mf = ctrl.Consequent(np.linspace(0, 1, 9), 'mf')
 
     mx["mx1"] = fuzz.gaussmf(mx.universe, Gxy, 0)
     mx["mx2"] = fuzz.gaussmf(mx.universe, Gxy, 0.2)
