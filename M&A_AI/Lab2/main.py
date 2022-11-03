@@ -189,6 +189,7 @@ def modeling_function_fuzzy_logic(name_function):
             z[i, j] = sim.output['mf']
 
     fig = plt.figure(figsize=(8, 8))
+    fig.suptitle("model " + name_function)
     ax = fig.add_subplot(111, projection='3d')
 
     surf = ax.plot_surface(x, y, z, rstride=1, cstride=1, cmap='viridis',
@@ -204,7 +205,17 @@ def modeling_function_fuzzy_logic(name_function):
 
 
 if __name__ == '__main__':
-    modeling_function_fuzzy_logic("te")
+    is_run = True
+    while is_run:
+        chosen_func = input("\n *input membership (1-gauss, 2-triangle, 3-trapation, other-exit): ")
+        if chosen_func == "1":
+            modeling_function_fuzzy_logic("gauss")
+        elif chosen_func == "2":
+            modeling_function_fuzzy_logic("triangle")
+        elif chosen_func == "3":
+            modeling_function_fuzzy_logic("trapation")
+        else:
+            is_run = False
 
 
 
