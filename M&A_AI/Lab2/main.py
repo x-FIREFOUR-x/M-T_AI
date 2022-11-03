@@ -74,7 +74,7 @@ def tables(mx, my, mf):
     table_name_mf_for_mx_my(table, mf)
 
 
-def modeling_function_fuzzy_logic(MX, MY, MF):
+def modeling_function_fuzzy_logic():
     Gxy = 0.085
     Gf = 0.053
     mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
@@ -87,6 +87,7 @@ def modeling_function_fuzzy_logic(MX, MY, MF):
     mx["mx4"] = fuzz.gaussmf(mx.universe, Gxy, 0.6)
     mx["mx5"] = fuzz.gaussmf(mx.universe, Gxy, 0.8)
     mx["mx6"] = fuzz.gaussmf(mx.universe, Gxy, 1)
+    mx_max_points = membership_function_gauss(6, Gxy, "mx")
 
     my["my1"] = fuzz.gaussmf(my.universe, Gxy, 0)
     my["my2"] = fuzz.gaussmf(my.universe, Gxy, 0.4)
@@ -94,6 +95,7 @@ def modeling_function_fuzzy_logic(MX, MY, MF):
     my["my3"] = fuzz.gaussmf(my.universe, Gxy, 0.6)
     my["my5"] = fuzz.gaussmf(my.universe, Gxy, 0.8)
     my["my6"] = fuzz.gaussmf(my.universe, Gxy, 1)
+    my_max_points = membership_function_gauss(6, Gxy, "my")
 
     mf["mf1"] = fuzz.gaussmf(mf.universe, Gf, 0)
     mf["mf2"] = fuzz.gaussmf(mf.universe, Gf, 0.125)
@@ -104,6 +106,10 @@ def modeling_function_fuzzy_logic(MX, MY, MF):
     mf["mf7"] = fuzz.gaussmf(mf.universe, Gf, 0.75)
     mf["mf8"] = fuzz.gaussmf(mf.universe, Gf, 0.875)
     mf["mf9"] = fuzz.gaussmf(mf.universe, Gf, 1)
+    mf_max_points = membership_function_gauss(9, Gf, "mf")
+
+    tables(mx_max_points, my_max_points, mf_max_points)
+    modeling_function()
 
     rule_mf1 = ctrl.Rule(antecedent=(mx["mx1"] & my["my1"] |
                                      mx["mx1"] & my["my2"] |
@@ -191,15 +197,7 @@ def modeling_function_fuzzy_logic(MX, MY, MF):
 
 
 if __name__ == '__main__':
-    mx = membership_function_gauss(6, 0.0850, "mx")
-    my = membership_function_gauss(6, 0.0850, "my")
-    mf = membership_function_gauss(9, 0.053, "mf")
-
-    x = mx[1]
-    tables(mx, my, mf)
-    modeling_function()
-
-    modeling_function_fuzzy_logic(mx, my, mf)
+    modeling_function_fuzzy_logic()
 
 
 
