@@ -8,14 +8,9 @@ from inputFunction import view_input_function
 
 
 
-
-def modeling_function_fuzzy_logic():
+def gauss_membership(mx, my, mf):
     Gxy = 0.085
     Gf = 0.053
-    mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
-    my = ctrl.Antecedent(np.linspace(0, 1, 6), 'my')
-    mf = ctrl.Consequent(np.linspace(0, 1, 9), 'mf')
-
     mx["mx1"] = fuzz.gaussmf(mx.universe, Gxy, 0)
     mx["mx2"] = fuzz.gaussmf(mx.universe, Gxy, 0.2)
     mx["mx3"] = fuzz.gaussmf(mx.universe, Gxy, 0.4)
@@ -42,6 +37,83 @@ def modeling_function_fuzzy_logic():
     mf["mf8"] = fuzz.gaussmf(mf.universe, Gf, 0.875)
     mf["mf9"] = fuzz.gaussmf(mf.universe, Gf, 1)
     mf_max_points = membership_function_gauss(9, Gf, "mf")
+
+    return mx, my, mf, mx_max_points, my_max_points, mf_max_points
+
+
+def triangle_membership(mx, my, mf):
+    mx["mx1"] = fuzz.trimf(mx.universe, [-0.2, 0.0, 0.2])
+    mx["mx2"] = fuzz.trimf(mx.universe, [0.0, 0.2, 0.4])
+    mx["mx3"] = fuzz.trimf(mx.universe, [0.2, 0.4, 0.6])
+    mx["mx4"] = fuzz.trimf(mx.universe, [0.4, 0.6, 0.8])
+    mx["mx5"] = fuzz.trimf(mx.universe, [0.6, 0.8, 1.0])
+    mx["mx6"] = fuzz.trimf(mx.universe, [0.8, 1.0, 1.2])
+    mx_max_points = membership_function_triangle(6, "mx")
+
+    my["my1"] = fuzz.trimf(my.universe, [-0.2, 0.0, 0.2])
+    my["my2"] = fuzz.trimf(my.universe, [0.0, 0.2, 0.4])
+    my["my3"] = fuzz.trimf(my.universe, [0.2, 0.4, 0.6])
+    my["my4"] = fuzz.trimf(my.universe, [0.4, 0.6, 0.8])
+    my["my5"] = fuzz.trimf(my.universe, [0.6, 0.8, 1.0])
+    my["my6"] = fuzz.trimf(my.universe, [0.8, 1.0, 1.2])
+    my_max_points = membership_function_triangle(6, "my")
+
+    mf["mf1"] = fuzz.trimf(mf.universe, [-0.125, 0.00, 0.125])
+    mf["mf2"] = fuzz.trimf(mf.universe, [0.000, 0.125, 0.250])
+    mf["mf3"] = fuzz.trimf(mf.universe, [0.125, 0.250, 0.375])
+    mf["mf4"] = fuzz.trimf(mf.universe, [0.250, 0.375, 0.500])
+    mf["mf5"] = fuzz.trimf(mf.universe, [0.375, 0.500, 0.625])
+    mf["mf6"] = fuzz.trimf(mf.universe, [0.500, 0.625, 0.750])
+    mf["mf7"] = fuzz.trimf(mf.universe, [0.625, 0.750, 0.875])
+    mf["mf8"] = fuzz.trimf(mf.universe, [0.750, 0.875, 1.000])
+    mf["mf9"] = fuzz.trimf(mf.universe, [0.875, 1.000, 1.250])
+    mf_max_points = membership_function_triangle(9, "mf")
+
+    return mx, my, mf, mx_max_points, my_max_points, mf_max_points
+
+
+def trapation_membership(mx, my, mf):
+    mx["mx1"] = fuzz.trapmf(mx.universe, [-0.2, 0.0, 0.1, 0.2])
+    mx["mx2"] = fuzz.trapmf(mx.universe, [0.0, 0.2, 0.3, 0.4])
+    mx["mx3"] = fuzz.trapmf(mx.universe, [0.2, 0.4, 0.5, 0.6])
+    mx["mx4"] = fuzz.trapmf(mx.universe, [0.4, 0.6, 0.7, 0.8])
+    mx["mx5"] = fuzz.trapmf(mx.universe, [0.6, 0.8, 0.9, 1.0])
+    mx["mx6"] = fuzz.trapmf(mx.universe, [0.8, 1.0, 1.1, 1.2])
+    mx_max_points = membership_function_trapation(6, "mx")
+
+    my["my1"] = fuzz.trapmf(my.universe, [-0.2, 0.0, 0.1, 0.2])
+    my["my2"] = fuzz.trapmf(my.universe, [0.0, 0.2, 0.3, 0.4])
+    my["my3"] = fuzz.trapmf(my.universe, [0.2, 0.4, 0.5, 0.6])
+    my["my4"] = fuzz.trapmf(my.universe, [0.4, 0.6, 0.7, 0.8])
+    my["my5"] = fuzz.trapmf(my.universe, [0.6, 0.8, 0.9, 1.0])
+    my["my6"] = fuzz.trapmf(my.universe, [0.8, 1.0, 1.1, 1.2])
+    my_max_points = membership_function_trapation(6, "my")
+
+    mf["mf1"] = fuzz.trapmf(mf.universe, [-0.125, 0.00, 0.0625, 0.125])
+    mf["mf2"] = fuzz.trapmf(mf.universe, [0.000, 0.125, 0.1875, 0.250])
+    mf["mf3"] = fuzz.trapmf(mf.universe, [0.125, 0.250, 0.3125, 0.375])
+    mf["mf4"] = fuzz.trapmf(mf.universe, [0.250, 0.375, 0.4375, 0.500])
+    mf["mf5"] = fuzz.trapmf(mf.universe, [0.375, 0.500, 0.5625, 0.625])
+    mf["mf6"] = fuzz.trapmf(mf.universe, [0.500, 0.625, 0.6875, 0.750])
+    mf["mf7"] = fuzz.trapmf(mf.universe, [0.625, 0.750, 0.8125, 0.875])
+    mf["mf8"] = fuzz.trapmf(mf.universe, [0.750, 0.875, 0.9375, 1.000])
+    mf["mf9"] = fuzz.trapmf(mf.universe, [0.875, 1.000, 1.0625, 1.250])
+    mf_max_points = membership_function_trapation(9, "mf")
+
+    return mx, my, mf, mx_max_points, my_max_points, mf_max_points
+
+
+def modeling_function_fuzzy_logic(name_function):
+    mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
+    my = ctrl.Antecedent(np.linspace(0, 1, 6), 'my')
+    mf = ctrl.Consequent(np.linspace(0, 1, 9), 'mf')
+
+    if name_function == "gauss":
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = gauss_membership(mx, my, mf)
+    elif name_function == "triangle":
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = triangle_membership(mx, my, mf)
+    else:
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = trapation_membership(mx, my, mf)
 
     calculate_tables(mx_max_points, my_max_points, mf_max_points)
     view_input_function()
@@ -132,7 +204,7 @@ def modeling_function_fuzzy_logic():
 
 
 if __name__ == '__main__':
-    modeling_function_fuzzy_logic()
+    modeling_function_fuzzy_logic("te")
 
 
 

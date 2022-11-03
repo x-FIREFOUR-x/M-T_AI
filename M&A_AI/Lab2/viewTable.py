@@ -1,5 +1,6 @@
 from inputFunction import function_z
 
+
 def calculate_tables(mx, my, mf):
     def print_table(table, is_value):
         if is_value:
