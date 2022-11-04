@@ -8,6 +8,7 @@ from viewTable import *
 from inputFunction import view_input_function
 from testModel import *
 
+IS_DIAGONAL = False
 
 def gauss_membership(mx, my, mf):
     Gxy = 0.085
@@ -103,22 +104,7 @@ def trapation_membership(mx, my, mf):
 
     return mx, my, mf, mx_max_points, my_max_points, mf_max_points
 
-
-def modeling_function_fuzzy_logic(name_function):
-    mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
-    my = ctrl.Antecedent(np.linspace(0, 1, 6), 'my')
-    mf = ctrl.Consequent(np.linspace(0, 1, 9), 'mf')
-
-    if name_function == "gauss":
-        mx, my, mf, mx_max_points, my_max_points, mf_max_points = gauss_membership(mx, my, mf)
-    elif name_function == "triangle":
-        mx, my, mf, mx_max_points, my_max_points, mf_max_points = triangle_membership(mx, my, mf)
-    else:
-        mx, my, mf, mx_max_points, my_max_points, mf_max_points = trapation_membership(mx, my, mf)
-
-    calculate_tables(mx_max_points, my_max_points, mf_max_points)
-    view_input_function()
-
+def create_rules(mx, my, mf):
     rule_mf1 = ctrl.Rule(antecedent=(mx["mx1"] & my["my1"] |
                                      mx["mx1"] & my["my2"] |
                                      mx["mx1"] & my["my3"] |
@@ -175,6 +161,48 @@ def modeling_function_fuzzy_logic(name_function):
 
     input_ctrl = ctrl.ControlSystem(rules=[rule_mf1, rule_mf2, rule_mf3, rule_mf4, rule_mf5,
                                            rule_mf6, rule_mf7, rule_mf8, rule_mf9])
+    return input_ctrl
+
+
+def create_diagonal_rules(mx, my, mf):
+    rule_mf1 = ctrl.Rule(antecedent=(mx["mx1"] & my["my1"]),
+                         consequent=mf["mf1"], label="mf1 rule")
+
+    rule_mf3 = ctrl.Rule(antecedent=(mx["mx2"] & my["my2"]),
+                         consequent=mf["mf3"], label="mf3 rule")
+
+    rule_mf4 = ctrl.Rule(antecedent=(mx["mx3"] & my["my3"]),
+                         consequent=mf["mf4"], label="mf4 rule")
+
+    rule_mf5 = ctrl.Rule(antecedent=(mx["mx4"] & my["my4"] |
+                                     mx["mx5"] & my["my5"] |
+                                     mx["mx6"] & my["my6"]),
+                         consequent=mf["mf5"], label="mf5 rule")
+
+    input_ctrl = ctrl.ControlSystem(rules=[rule_mf1, rule_mf3, rule_mf4, rule_mf5])
+    return input_ctrl
+
+
+
+def modeling_function_fuzzy_logic(name_function):
+    mx = ctrl.Antecedent(np.linspace(0, 1, 6), 'mx')
+    my = ctrl.Antecedent(np.linspace(0, 1, 6), 'my')
+    mf = ctrl.Consequent(np.linspace(0, 1, 9), 'mf')
+
+    if name_function == "gauss":
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = gauss_membership(mx, my, mf)
+    elif name_function == "triangle":
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = triangle_membership(mx, my, mf)
+    else:
+        mx, my, mf, mx_max_points, my_max_points, mf_max_points = trapation_membership(mx, my, mf)
+
+    calculate_tables(mx_max_points, my_max_points, mf_max_points)
+    view_input_function()
+
+    if not IS_DIAGONAL:
+        input_ctrl = create_rules(mx, my, mf)
+    else:
+        input_ctrl = create_diagonal_rules(mx, my, mf)
     sim = ctrl.ControlSystemSimulation(input_ctrl)
 
     upsampled = [0, 0.2, 0.4, 0.6, 0.8, 1]
