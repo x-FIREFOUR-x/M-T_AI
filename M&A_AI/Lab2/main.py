@@ -175,13 +175,11 @@ def modeling_function_fuzzy_logic(name_function):
 
     input_ctrl = ctrl.ControlSystem(rules=[rule_mf1, rule_mf2, rule_mf3, rule_mf4, rule_mf5,
                                            rule_mf6, rule_mf7, rule_mf8, rule_mf9])
-    sim = ctrl.ControlSystemSimulation(input_ctrl, flush_after_run=36 * 36 + 1)
+    sim = ctrl.ControlSystemSimulation(input_ctrl)
 
     upsampled = [0, 0.2, 0.4, 0.6, 0.8, 1]
     x, y = np.meshgrid(upsampled, upsampled)
     z = np.zeros_like(x)
-
-    z_diagonal = np.zeros_like(upsampled)
 
     for i in range(len(upsampled)):
         for j in range(len(upsampled)):
