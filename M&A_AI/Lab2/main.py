@@ -1,3 +1,4 @@
+import numpy as np
 import skfuzzy.fuzzymath as fuzzmath
 import math
 from skfuzzy import control as ctrl
@@ -5,7 +6,7 @@ from skfuzzy import control as ctrl
 from viewMembershipFunctions import *
 from viewTable import *
 from inputFunction import view_input_function
-
+from testModel import *
 
 
 def gauss_membership(mx, my, mf):
@@ -174,13 +175,14 @@ def modeling_function_fuzzy_logic(name_function):
 
     input_ctrl = ctrl.ControlSystem(rules=[rule_mf1, rule_mf2, rule_mf3, rule_mf4, rule_mf5,
                                            rule_mf6, rule_mf7, rule_mf8, rule_mf9])
-    sim = ctrl.ControlSystemSimulation(input_ctrl)
+    sim = ctrl.ControlSystemSimulation(input_ctrl, flush_after_run=36 * 36 + 1)
 
     upsampled = [0, 0.2, 0.4, 0.6, 0.8, 1]
     x, y = np.meshgrid(upsampled, upsampled)
     z = np.zeros_like(x)
 
-    # Loop through the system 21*21 times to collect the control surface
+    z_diagonal = np.zeros_like(upsampled)
+
     for i in range(len(upsampled)):
         for j in range(len(upsampled)):
             sim.input['mx'] = x[i, j]
@@ -188,7 +190,7 @@ def modeling_function_fuzzy_logic(name_function):
             sim.compute()
             z[i, j] = sim.output['mf']
 
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(7, 6))
     fig.suptitle("model " + name_function)
     ax = fig.add_subplot(111, projection='3d')
 
@@ -201,6 +203,8 @@ def modeling_function_fuzzy_logic(name_function):
 
     ax.view_init(30, 200)
     plt.show()
+
+    calculate_eror(sim, name_function)
 
 
 
