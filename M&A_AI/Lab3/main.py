@@ -46,8 +46,10 @@ def visualize_clusters(points, labels, centers, min_limit, max_limit):
 def objective_function(points, max_amount_cluster):
     fpcs = []
     for ncenters in range(1, max_amount_cluster + 1):
-        cntr, u, u0, d, jm, p, fpc = fuzz.cluster.cmeans(points, ncenters, 2, error=0.005, maxiter=1000, init=None)
-        fpcs.append(fpc)
+        model = FCM(n_clusters=ncenters)
+        model.fit(points)
+        fpcs.append(model.partition_coefficient)
+        p =0
 
     print(fpcs)
     plt.plot(np.r_[2:11], fpcs)
