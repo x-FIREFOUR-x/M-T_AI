@@ -45,14 +45,15 @@ def visualize_clusters(points, labels, centers, min_limit, max_limit):
 
 def objective_function(points, max_amount_cluster):
     fpcs = []
-    for ncenters in range(1, max_amount_cluster + 1):
+    for ncenters in range(2, max_amount_cluster + 1):
         model = FCM(n_clusters=ncenters)
         model.fit(points)
         fpcs.append(model.partition_coefficient)
         p =0
 
+    print("fuzzy partition coefficient for amount clusters (1, ..., 9)")
     print(fpcs)
-    plt.plot(np.r_[2:11], fpcs)
+    plt.plot(np.r_[2:10], fpcs)
     plt.show()
 
 
