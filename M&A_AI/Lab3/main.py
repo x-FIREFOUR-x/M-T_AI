@@ -50,11 +50,19 @@ if __name__ == '__main__':
     amount_clusters = 3
 
     points = np.array(random_generate_points(amount_points, min_limit, max_limit))
-    print(points)
+    print("Points: ")
+    i = 1
+    for point in points:
+        print(point, end=", ")
+        if i % 15 == 0:
+            print()
+        i += 1
     visualize_points(points, min_limit, max_limit)
 
     model = FCM(n_clusters=amount_clusters)
     model.fit(points)
     labels = model.predict(points)
     centers = model.centers
+    print("\nCenters: ")
+    print(centers)
     visualize_clusters(points, labels, centers, min_limit, max_limit)
